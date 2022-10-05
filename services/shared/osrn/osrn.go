@@ -25,6 +25,7 @@ type OSRN struct {
 	Id string
 }
 
+// String converts an OSRN to its string format.
 func (o OSRN) String() string {
 	osrn := fmt.Sprintf("osrn:%v:%v:%v", o.Service, o.Type, o.Id)
 	return osrn
