@@ -7,7 +7,7 @@ import (
 
 var (
 	OSRNRegex *regexp.Regexp = regexp.MustCompile(
-		`^osrn:(?P<service>[a-z]+):(?P<resource>[a-z]+)?:(?P<resourceId>[a-z0-9]+)$`,
+		`^osrn:(?P<service>[a-z]+):(?P<resource>[a-z]+)?:(?P<resourceId>[a-z0-9*]+)$`,
 	)
 )
 
