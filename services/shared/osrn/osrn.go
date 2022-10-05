@@ -49,12 +49,12 @@ func (o OSRN) String() (string, error) {
 	}
 
 	var osrn string
-	base := fmt.Sprintf("osrn:%v", o.Version)
+	base := fmt.Sprintf("osrn:%v:%v", o.Version, o.Service)
 
 	if o.Version == OSRNVersion1 {
 		osrn = fmt.Sprintf("%v:%v", base, o.Id)
 	} else if o.Version == OSRNVersion2 {
-		osrn = fmt.Sprintf("%v:%v:%v", base, o.Type, o.Id)
+		osrn = fmt.Sprintf("%v:%v/%v", base, o.Type, o.Id)
 	} else {
 		return "", errors.New("invalid osrn: no Version set")
 	}

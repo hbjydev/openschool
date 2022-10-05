@@ -41,3 +41,36 @@ func TestOsrnParse(t *testing.T) {
 		}
 	}
 }
+
+func TestOsrnString(t *testing.T) {
+	classOsrn := osrn.OSRN{
+		Version: osrn.OSRNVersion1,
+		Service: `class`,
+		Id:      `ch72gsb320000udocl363eofy`,
+	}
+	classStr := "osrn:1:class:ch72gsb320000udocl363eofy"
+
+	teacherOsrn := osrn.OSRN{
+		Version: osrn.OSRNVersion2,
+		Service: `people`,
+		Type:    `teacher`,
+		Id:      `ch72gsb320000udocl363eofy`,
+	}
+	teacherStr := "osrn:2:people:teacher/ch72gsb320000udocl363eofy"
+
+	classOut, err := classOsrn.String()
+	if err != nil {
+		t.Error(err)
+	}
+	if classOut != classStr {
+		t.Error("invalid osrn output")
+	}
+
+	teacherOut, err := teacherOsrn.String()
+	if err != nil {
+		t.Error(err)
+	}
+	if teacherOut != teacherStr {
+		t.Error("invalid osrn output")
+	}
+}
