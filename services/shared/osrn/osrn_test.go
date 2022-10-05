@@ -7,34 +7,26 @@ import (
 )
 
 func TestOsrnParse(t *testing.T) {
-	classOsrn := osrn.OSRN{}
 	classStr := "osrn:class::ch72gsb320000udocl363eofy"
-
-	teacherOsrn := osrn.OSRN{}
 	teacherStr := "osrn:people:teacher:ch72gsb320000udocl363eofy"
 
-	if err := classOsrn.Parse(classStr); err != nil {
-		t.Error(err.Error())
-	} else {
-		if classOsrn.Service != "class" {
-			t.Error("osrn parsed invalid service")
-		} else if classOsrn.Type != "" {
-			t.Error("osrn parsed a type")
-		} else if classOsrn.Id != "ch72gsb320000udocl363eofy" {
-			t.Error("osrn parsed invalid id")
-		}
+	classOsrn := osrn.ParseOSRN(classStr)
+	teacherOsrn := osrn.ParseOSRN(teacherStr)
+
+	if classOsrn.Service != "class" {
+		t.Error("osrn parsed invalid service")
+	} else if classOsrn.Type != "" {
+		t.Error("osrn parsed a type")
+	} else if classOsrn.Id != "ch72gsb320000udocl363eofy" {
+		t.Error("osrn parsed invalid id")
 	}
 
-	if err := teacherOsrn.Parse(teacherStr); err != nil {
-		t.Error(err.Error())
-	} else {
-		if teacherOsrn.Service != "people" {
-			t.Error("osrn parsed invalid service")
-		} else if teacherOsrn.Type != "teacher" {
-			t.Error("osrn parsed invalid type")
-		} else if teacherOsrn.Id != "ch72gsb320000udocl363eofy" {
-			t.Error("osrn parsed invalid id")
-		}
+	if teacherOsrn.Service != "people" {
+		t.Error("osrn parsed invalid service")
+	} else if teacherOsrn.Type != "teacher" {
+		t.Error("osrn parsed invalid type")
+	} else if teacherOsrn.Id != "ch72gsb320000udocl363eofy" {
+		t.Error("osrn parsed invalid id")
 	}
 }
 

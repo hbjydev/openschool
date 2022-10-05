@@ -7,7 +7,7 @@ import (
 
 var (
 	OSRNRegex *regexp.Regexp = regexp.MustCompile(
-		`^osrn:(?P<service>[a-z]+):(?P<resource>[a-z0-9]+)?:(?P<resourceId>[a-z0-9]+)$`,
+		`^osrn:(?P<service>[a-z]+):(?P<resource>[a-z]+)?:(?P<resourceId>[a-z0-9]+)$`,
 	)
 )
 
@@ -35,10 +35,13 @@ func (o OSRN) String() string {
 //	o := OSRN{}
 //	s := "osrn:class:ch72gsb320000udocl363eofy"
 //	o.Parse(s)
-func (o *OSRN) Parse(input string) error {
+func ParseOSRN(input string) OSRN {
+	o := OSRN{}
 	parts := OSRNRegex.FindAllStringSubmatch(input, -1)
+
 	o.Service = parts[0][1]
 	o.Type = parts[0][2]
 	o.Id = parts[0][3]
-	return nil
+
+	return o
 }
