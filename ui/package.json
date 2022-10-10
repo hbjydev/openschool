@@ -1,0 +1,13 @@
+{
+  "name": "@openschool/ui",
+  "version": "1.0.0",
+  "description": "The UI component of the OpenSchool software",
+  "main": "main.js",
+  "repository": "https://github.com/hbjydev/openschool",
+  "author": "Hayden Young <hayden@hbjy.dev> (https://h4n.io)",
+  "license": "Apache-2.0",
+  "private": true,
+  "devDependencies": {
+    "electron": "^21.1.0"
+  }
+}
