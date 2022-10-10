@@ -16,9 +16,7 @@ jobs:
           go-version: 1.19
 
       - name: Build
-        working-directory: services
         run: go build -v ./...
 
       - name: Test
-        working-directory: services
         run: go test -v ./...

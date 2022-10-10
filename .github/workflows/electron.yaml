@@ -1,0 +1,60 @@
+---
+name: Electron
+
+on: [push]
+
+jobs:
+  build-linux:
+    name: "Build (Linux)"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@master
+        with:
+          node-version: 16
+
+      - name: Install ubuntu dependencies
+        working-directory: ui
+        run: apt-get update && apt-get install rpm -y
+
+      - name: Install yarn dependencies
+        working-directory: ui
+        run: yarn install
+
+      - name: Build
+        working-directory: ui
+        run: yarn make
+
+  build-macos:
+    name: "Build (latest macOS)"
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@master
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        working-directory: ui
+        run: yarn install
+
+      - name: Build
+        working-directory: ui
+        run: yarn make
+
+  build-windows:
+    name: "Build (Windows)"
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@master
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        working-directory: ui
+        run: yarn install
+
+      - name: Build
+        working-directory: ui
+        run: yarn make
