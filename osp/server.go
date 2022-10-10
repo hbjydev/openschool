@@ -61,7 +61,7 @@ func (s *Service) handle(conn net.Conn) {
 	// as the end of the request body.
 	rawRequest, err := bufio.NewReader(conn).ReadString('\n')
 	if err != nil {
-		s.logger.Sugar().Errorf("failed to read the request: %s", err)
+		s.logger.Sugar().Error("failed to read the request", "error", err)
 		return
 	}
 

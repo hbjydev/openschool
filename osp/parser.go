@@ -1,7 +1,6 @@
 package osp
 
 import (
-	"errors"
 	"strings"
 
 	"go.h4n.io/openschool/osrn"
@@ -38,7 +37,7 @@ func parseRequestLine(line string) (action string, reqOsrn osrn.OSRN, version st
 	components := strings.Split(line, " ")
 
 	if len(components) != 3 {
-		err = errors.New("not enough request line components")
+		err = ErrorNotEnoughRequestLineComponents
 		return
 	}
 
