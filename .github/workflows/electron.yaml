@@ -88,3 +88,9 @@ jobs:
       - name: Build
         working-directory: ui
         run: yarn make
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: openschool-windows-x64.exe
+          path: |
+            ui/out/make/squirrel.windows/x64/* Setup.exe
