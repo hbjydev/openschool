@@ -31,9 +31,14 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: openschool-linux-x64
+          name: openschool-linux-x64.deb
           path: |
             ui/out/make/deb/x64/*.deb
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: openschool-linux-x64.rpm
+          path: |
             ui/out/make/rpm/x64/*.rpm
 
   build-macos:
