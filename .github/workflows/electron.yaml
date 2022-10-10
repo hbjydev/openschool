@@ -62,6 +62,12 @@ jobs:
         working-directory: ui
         run: yarn make
 
+      - uses: actions/upload-artifact@v3
+        with:
+          name: openschool-darwin-x64.zip
+          path: |
+            ui/out/make/zip/x64/*.zip
+
   build-windows:
     name: "Build (Windows)"
     runs-on: windows-latest
