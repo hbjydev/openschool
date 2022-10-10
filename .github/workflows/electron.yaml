@@ -21,6 +21,10 @@ jobs:
         working-directory: ui
         run: yarn install
 
+      - name: Build TypeScript
+        working-directory: ui
+        run: yarn build
+
       - name: Build
         working-directory: ui
         run: yarn make
@@ -38,6 +42,10 @@ jobs:
         working-directory: ui
         run: yarn install
 
+      - name: Build TypeScript
+        working-directory: ui
+        run: yarn build
+
       - name: Build
         working-directory: ui
         run: yarn make
@@ -54,6 +62,10 @@ jobs:
       - name: Install dependencies
         working-directory: ui
         run: yarn install
+
+      - name: Build TypeScript
+        working-directory: ui
+        run: yarn build
 
       - name: Build
         working-directory: ui
