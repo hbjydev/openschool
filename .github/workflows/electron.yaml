@@ -29,6 +29,13 @@ jobs:
         working-directory: ui
         run: yarn make
 
+      - uses: actions/upload-artifact@v3
+        with:
+          name: openschool-linux-x64
+          path: |
+            out/make/deb/x64/*.deb
+            out/make/rpm/x64/*.rpm
+
   build-macos:
     name: "Build (latest macOS)"
     runs-on: macos-latest
