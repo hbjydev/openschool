@@ -2,7 +2,6 @@ package osp_test
 
 import (
 	"errors"
-	"fmt"
 	"testing"
 
 	"github.com/go-playground/assert/v2"
@@ -36,7 +35,6 @@ func TestParseInvalidAction(t *testing.T) {
 	_, err := osp.Parse(request)
 
 	if err != nil {
-		fmt.Printf("err: %v, target: %v", err.Error(), osp.ErrorBadAction.Error())
 		if errors.Is(err, osp.ErrorBadAction) {
 			return
 		}
