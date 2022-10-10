@@ -15,7 +15,7 @@ jobs:
 
       - name: Install ubuntu dependencies
         working-directory: ui
-        run: apt-get update && apt-get install rpm -y
+        run: sudo apt-get install rpm -y
 
       - name: Install yarn dependencies
         working-directory: ui
