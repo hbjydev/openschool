@@ -6,8 +6,8 @@ import (
 	"testing"
 
 	"github.com/go-playground/assert/v2"
-	"go.h4n.io/openschool/shared/osp"
-	"go.h4n.io/openschool/shared/osrn"
+	"go.h4n.io/openschool/osp"
+	"go.h4n.io/openschool/osrn"
 )
 
 func TestParseOnlyRequestLine(t *testing.T) {

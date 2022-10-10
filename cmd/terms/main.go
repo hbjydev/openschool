@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"go.h4n.io/openschool/shared/osp"
+	"go.h4n.io/openschool/osp"
 )
 
 func main() {

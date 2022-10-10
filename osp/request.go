@@ -1,6 +1,6 @@
 package osp
 
-import "go.h4n.io/openschool/shared/osrn"
+import "go.h4n.io/openschool/osrn"
 
 type OspAction string
 
@@ -31,4 +31,12 @@ type OspRequest struct {
 	Action  OspAction
 	Osrn    osrn.OSRN
 	Version string
+}
+
+func (r *OspRequest) LogMaps() []interface{} {
+	return []interface{}{
+		"request.action", r.Action,
+		"request.osrn", r.Osrn,
+		"request.version", r.Version,
+	}
 }

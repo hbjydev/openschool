@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strings"
 
-	"go.h4n.io/openschool/shared/osrn"
+	"go.h4n.io/openschool/osrn"
 )
 
 type OspParser struct{}

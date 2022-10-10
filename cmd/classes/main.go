@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"go.h4n.io/openschool/shared/osp"
+	"go.h4n.io/openschool/osp"
 )
 
 func main() {
@@ -11,10 +11,6 @@ func main() {
 		Addr: `0.0.0.0:8001`,
 		Name: `classes`,
 	}
-
-	// classRepo := class.InMemoryClassRepository{
-	// Items: []models.Class{},
-	// }
 
 	log.Fatal(server.Run())
 }

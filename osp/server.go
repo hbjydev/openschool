@@ -2,9 +2,9 @@ package osp
 
 import (
 	"bufio"
+	"fmt"
 	"net"
 	"os"
-	"strings"
 
 	"go.uber.org/zap"
 )
@@ -68,31 +68,44 @@ func (s *Service) handle(conn net.Conn) {
 	// Parse the request body as an OSP request.
 	req, err := Parse(rawRequest)
 	if err != nil {
-		panic(err)
+		resp := Response{
+			Status: OspStatusBadRequest,
+			Headers: map[string]string{
+				"content-type": "text/plain",
+			},
+			Body: err.Error(),
+		}
+		conn.Write(resp.Bytes())
+		return
 	}
+
+	logKvs := ConnLogMaps(conn)
+	logKvs = append(logKvs, req.LogMaps()...)
 
 	// Ensure the requested service name matches the name of the current
 	// service.
 	if req.Osrn.Service != s.Name {
-		line := `OSP/1.1 400 Bad Request`
-		conn.Write([]byte(line))
+		resp := Response{
+			Status: OspStatusBadRequest,
+			Headers: map[string]string{
+				"content-type": "text/plain",
+			},
+			Body: fmt.Sprintf(`this server does not include service %v`, req.Osrn.Service),
+		}
+
+		s.logger.Sugar().Errorw("invalid service given", logKvs...)
+
+		conn.Write(resp.Bytes())
 		return
 	}
 
 	// Log the request to the console.
-	s.logger.Sugar().Infow(
-		"got request",
+	s.logger.Sugar().Infow("got request", logKvs...)
+}
 
-		"action",
-		req.Action,
-
-		"osrn",
-		req.Osrn,
-
-		"version",
-		req.Version,
-
-		"remote",
-		strings.Split(conn.RemoteAddr().String(), ":")[0],
-	)
+func ConnLogMaps(c net.Conn) []interface{} {
+	return []interface{}{
+		"conn.remote",
+		c.RemoteAddr().String(),
+	}
 }
