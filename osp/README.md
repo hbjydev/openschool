@@ -2,8 +2,9 @@
 
 The OSP is the protocol driving most inter-service communications.
 
-The specification is loosely based on the HTTP/1 specification, facilitating all
-unary resource calls.
+The specification is loosely based on the HTTP/1 specification as outlined in
+[RFC 2616](https://www.rfc-editor.org/rfc/rfc2616), facilitating all unary
+resource calls.
 
 ## Request Line
 
