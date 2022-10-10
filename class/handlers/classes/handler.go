@@ -4,7 +4,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"go.h4n.io/openschool/services/class/repos/class"
+	"go.h4n.io/openschool/class/repos/class"
 )
 
 type ClassesHandler struct {

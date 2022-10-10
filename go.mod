@@ -1,4 +1,4 @@
-module go.h4n.io/openschool/services
+module go.h4n.io/openschool
 
 go 1.19
 

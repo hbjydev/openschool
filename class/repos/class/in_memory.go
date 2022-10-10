@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/lucsky/cuid"
-	"go.h4n.io/openschool/services/class/models"
+	"go.h4n.io/openschool/class/models"
 )
 
 type InMemoryClassRepository struct {

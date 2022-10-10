@@ -1,6 +1,6 @@
 package classes
 
-import "go.h4n.io/openschool/services/class/models"
+import "go.h4n.io/openschool/class/models"
 
 type ClassesIndexRequest struct {
 	Page    int `json:"page"`

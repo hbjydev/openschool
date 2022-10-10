@@ -1,6 +1,6 @@
 package class
 
-import "go.h4n.io/openschool/services/class/models"
+import "go.h4n.io/openschool/class/models"
 
 type ClassRepository interface {
 	GetAll(perPage int, page int) ([]models.Class, error)

@@ -2,9 +2,9 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"go.h4n.io/openschool/services/class/handlers/classes"
-	"go.h4n.io/openschool/services/class/models"
-	"go.h4n.io/openschool/services/class/repos/class"
+	"go.h4n.io/openschool/class/handlers/classes"
+	"go.h4n.io/openschool/class/models"
+	"go.h4n.io/openschool/class/repos/class"
 )
 
 func main() {
