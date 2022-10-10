@@ -3,7 +3,7 @@ package osrn_test
 import (
 	"testing"
 
-	"go.h4n.io/openschool/shared/osrn"
+	"go.h4n.io/openschool/osrn"
 )
 
 func TestOsrnParse(t *testing.T) {
