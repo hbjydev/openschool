@@ -16,12 +16,16 @@ func (s *OspStatus) String() string {
 
 var (
 	OspStatusSuccess = OspStatus{
-		StatusCode: 400,
-		Reason:     "Bad Request",
+		StatusCode: 200,
+		Reason:     "Success",
 	}
 	OspStatusBadRequest = OspStatus{
 		StatusCode: 400,
 		Reason:     "Bad Request",
+	}
+	OspStatusServerError = OspStatus{
+		StatusCode: 500,
+		Reason:     "Internal server error",
 	}
 )
 
@@ -52,7 +56,7 @@ func (r *Response) String() string {
 		str = fmt.Sprintf("%v\n%v", str, r.Body)
 	}
 
-	return str
+	return fmt.Sprintf("%v\n", str)
 }
 
 func (r *Response) Bytes() []byte {

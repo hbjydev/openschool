@@ -1,0 +1,62 @@
+# yaml-language-server: $schema=https://json.schemastore.org/taskfile.json
+version: '3'
+
+vars:
+  PKI_ROOT: pki
+  PKI_PATH: "{{.PKI_ROOT}}"
+  PKI_BASE_SUBJ: "OU=Services/O=OpenSchool/C=GB/ST=South Yorkshire/L=Sheffield"
+
+  ROOT_CA_PATH: "{{.PKI_ROOT}}/ca"
+  ROOT_CA_CSR: "{{.ROOT_CA_PATH}}/ca.csr"
+  ROOT_CA_KEY: "{{.ROOT_CA_PATH}}/ca.key"
+  ROOT_CA_CRT: "{{.ROOT_CA_PATH}}/ca.crt"
+  ROOT_CA_TTL: "365"
+  ROOT_CA_SUBJ: "/CN=OpenSchool Certification Authority/{{.PKI_BASE_SUBJ}}"
+
+  SERVICE: "{{.CLI_ARGS}}"
+  SVC_CERT_PATH: "{{.PKI_ROOT}}/{{.SERVICE}}"
+  SVC_CERT_CSR: "{{.SVC_CERT_PATH}}/cert.csr"
+  SVC_CERT_KEY: "{{.SVC_CERT_PATH}}/cert.key"
+  SVC_CERT_CRT: "{{.SVC_CERT_PATH}}/cert.pem"
+  SVC_CERT_CHAIN: "{{.SVC_CERT_PATH}}/fullchain.pem"
+  SVC_CERT_TTL: "365"
+  SVC_CERT_SUBJ: "/CN=${SERVICE}/{{.PKI_BASE_SUBJ}}"
+
+tasks:
+  init:
+    desc: Initializes the CA and any required certificates for the services.
+    cmds:
+      - task pki:ca # create the ca
+      # create all the certs from the ca
+      - task pki:cert -- classes
+      - task pki:cert -- messaging
+      - task pki:cert -- parents
+      - task pki:cert -- students
+      - task pki:cert -- teachers
+      - task pki:cert -- terms
+
+  ca:
+    desc: Initializes the CA.
+    cmds:
+      - mkdir -p "{{.ROOT_CA_PATH}}"
+      - openssl req -new -newkey rsa:4096 -nodes -out "{{.ROOT_CA_CSR}}" -keyout "{{.ROOT_CA_KEY}}" -sha256 -subj "{{.ROOT_CA_SUBJ}}"
+      - openssl x509 -signkey "{{.ROOT_CA_KEY}}" -days "{{.ROOT_CA_TTL}}" -req -in "{{.ROOT_CA_CSR}}" -out "{{.ROOT_CA_CRT}}" -sha256
+    status:
+      - test -d "{{.ROOT_CA_PATH}}"
+      - test -f "{{.ROOT_CA_CRT}}"
+      - test -f "{{.ROOT_CA_KEY}}"
+
+  cert:
+    desc: Creates a certificate (signed by the CA) for a given service.
+    cmds:
+      - mkdir -p "{{.SVC_CERT_PATH}}"
+      - openssl req -new -newkey rsa:4096 -nodes -out "{{.SVC_CERT_CSR}}" -keyout "{{.SVC_CERT_KEY}}" -sha256 -subj "{{.SVC_CERT_SUBJ}}"
+      - openssl x509 -req -days "{{.SVC_CERT_TTL}}" -in "{{.SVC_CERT_CSR}}" -CA "{{.ROOT_CA_CRT}}" -CAkey "{{.ROOT_CA_KEY}}" -out "{{.SVC_CERT_CRT}}" -set_serial 01 -sha256
+      - cat "{{.SVC_CERT_CRT}}" "{{.ROOT_CA_CRT}}" > "{{.SVC_CERT_CHAIN}}"
+    deps:
+      - ca
+    status:
+      - test -d "{{.SVC_CERT_PATH}}"
+      - test -f "{{.SVC_CERT_CRT}}"
+      - test -f "{{.SVC_CERT_KEY}}"
+      - test -f "{{.SVC_CERT_CHAIN}}"

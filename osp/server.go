@@ -1,17 +1,21 @@
 package osp
 
 import (
-	"bufio"
+	"crypto/tls"
 	"fmt"
 	"net"
 	"os"
 
+	"go.h4n.io/openschool/util"
 	"go.uber.org/zap"
 )
 
 type Service struct {
-	Addr string
-	Name string
+	Addr      string
+	Name      string
+	Resources map[string]Resource
+
+	Tls *tls.Config
 
 	logger *zap.Logger
 }
@@ -26,10 +30,18 @@ func (s *Service) Run() error {
 	}
 	s.logger = logger
 
+	var lis net.Listener
 	// Open a new TCP socket on the [Service.Addr]
-	lis, err := net.Listen("tcp", s.Addr)
-	if err != nil {
-		return err
+	if s.Tls != nil {
+		lis, err = tls.Listen("tcp", s.Addr, s.Tls)
+		if err != nil {
+			return err
+		}
+	} else {
+		lis, err = net.Listen("tcp", s.Addr)
+		if err != nil {
+			return err
+		}
 	}
 
 	// Close the listener once the service stops
@@ -59,7 +71,7 @@ func (s *Service) handle(conn net.Conn) {
 
 	// Read the body of the connection into a string, marking a newline operator
 	// as the end of the request body.
-	rawRequest, err := bufio.NewReader(conn).ReadString('\n')
+	rawRequest, err := util.ReadConnection(conn)
 	if err != nil {
 		s.logger.Sugar().Error("failed to read the request", "error", err)
 		return
@@ -101,6 +113,50 @@ func (s *Service) handle(conn net.Conn) {
 
 	// Log the request to the console.
 	s.logger.Sugar().Infow("got request", logKvs...)
+
+	res, ok := s.Resources[req.Osrn.Type]
+	if !ok {
+		resp := Response{
+			Status: OspStatusBadRequest,
+			Headers: map[string]string{
+				"content-type": "text/plain",
+			},
+			Body: fmt.Sprintf(`this service does not include resource %v`, req.Osrn.Type),
+		}
+
+		conn.Write(resp.Bytes())
+		return
+	}
+
+	var resp Response
+
+	switch req.Action {
+	case OspActionGet:
+		resp, err = res.GET(req)
+	case OspActionList:
+		resp, err = res.LIST(req)
+	case OspActionCreate:
+		resp, err = res.CREATE(req)
+	case OspActionUpdate:
+		resp, err = res.UPDATE(req)
+	case OspActionDelete:
+		resp, err = res.DELETE(req)
+	}
+
+	if err != nil {
+		resp := Response{
+			Status: OspStatusServerError,
+			Headers: map[string]string{
+				"content-type": "text/plain",
+			},
+			Body: err.Error(),
+		}
+
+		conn.Write(resp.Bytes())
+		return
+	}
+
+	conn.Write(resp.Bytes())
 }
 
 func ConnLogMaps(c net.Conn) []interface{} {

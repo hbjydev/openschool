@@ -1,6 +1,10 @@
 package osp
 
-import "go.h4n.io/openschool/osrn"
+import (
+	"fmt"
+
+	"go.h4n.io/openschool/osrn"
+)
 
 type OspAction string
 
@@ -39,4 +43,12 @@ func (r *OspRequest) LogMaps() []interface{} {
 		"request.osrn", r.Osrn,
 		"request.version", r.Version,
 	}
+}
+
+func (r *OspRequest) String() string {
+	return fmt.Sprintf("%v %v %v\n\n", r.Action, r.Osrn, r.Version)
+}
+
+func (r *OspRequest) Bytes() []byte {
+	return []byte(r.String())
 }

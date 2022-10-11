@@ -1,0 +1,34 @@
+version: '3'
+
+includes:
+  pki:
+    taskfile: .taskfiles/pki.yaml
+
+tasks:
+  init:
+    desc: Downloads all dependencies and initializes the required PKI.
+    cmds:
+      - go mod download
+      - task pki:init
+    preconditions:
+      - msg: You don't have Go installed.
+        sh: which go
+      - msg: You don't have Go 1.19+ installed.
+        sh: "[[ `go version | awk '{print $3}'` =~ 'go1.19.*' ]]"
+    silent: true
+
+  buildAll:
+    desc: Builds all services
+    cmds:
+      - task build -- ospc
+      - task build -- classes
+      - task build -- messaging
+      - task build -- parents
+      - task build -- students
+      - task build -- teachers
+      - task build -- terms
+
+  build:
+    desc: "Builds a service (usage: task build -- <service name>)"
+    cmds:
+      - go build -o out/{{.CLI_ARGS}} cmd/{{.CLI_ARGS}}/main.go
