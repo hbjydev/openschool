@@ -1,26 +1,11 @@
-import { app, BrowserWindow } from "electron";
-import * as path from "path";
+import { createApp } from "vue";
+import "@fontsource/cantarell";
+import "./style.css";
+import App from "./App.vue";
+import { router } from "./router";
 
-const createWindow = () => {
-  const win = new BrowserWindow({
-    width: 600,
-    height: 400,
-    webPreferences: {
-      preload: path.join(__dirname, "..", "public", "preload.js"),
-    },
-  });
+const app = createApp(App);
 
-  win.loadFile("public/index.html");
-};
+app.use(router);
 
-app.whenReady().then(() => {
-  createWindow();
-
-  app.on("activate", () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
-  });
-});
-
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") app.quit();
-});
+app.mount("#app");
