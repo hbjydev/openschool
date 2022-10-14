@@ -7,7 +7,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: 'Cantarell, sans-serif'
+        sans: 'Inter, sans-serif'
       },
       colors: {
         bg: '#f6f5f4'
