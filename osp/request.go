@@ -35,6 +35,8 @@ type OspRequest struct {
 	Action  OspAction
 	Osrn    osrn.OSRN
 	Version string
+	Headers map[string]string
+	Body    string
 }
 
 func (r *OspRequest) LogMaps() []interface{} {
@@ -46,7 +48,7 @@ func (r *OspRequest) LogMaps() []interface{} {
 }
 
 func (r *OspRequest) String() string {
-	return fmt.Sprintf("%v %v %v\n\n", r.Action, r.Osrn, r.Version)
+	return fmt.Sprintf("%v %v %v\r\n\r\n", r.Action, r.Osrn, r.Version)
 }
 
 func (r *OspRequest) Bytes() []byte {

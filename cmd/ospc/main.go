@@ -2,13 +2,13 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"net"
 	"os"
 	"strings"
 
 	"go.h4n.io/openschool/osp"
 	"go.h4n.io/openschool/osrn"
-	"go.h4n.io/openschool/util"
 )
 
 func main() {
@@ -37,13 +37,12 @@ func main() {
 		Version: "OSP/1.1",
 	}
 
+	fmt.Printf("%v", req.String())
 	conn.Write(req.Bytes())
 
-	lines, err := util.ReadConnection(conn)
+	result, err := io.ReadAll(conn)
 	if err != nil {
 		fmt.Printf("error reading response: %v", err.Error())
-		return
 	}
-
-	fmt.Println(lines)
+	fmt.Println(string(result))
 }

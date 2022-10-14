@@ -24,7 +24,7 @@ type Service struct {
 // [Service.Addr] and begin a handler loop.
 func (s *Service) Run() error {
 	// Create a new Zap logger (which will log to JSON)
-	logger, err := zap.NewProduction()
+	logger, err := zap.NewDevelopment()
 	if err != nil {
 		return err
 	}
@@ -57,6 +57,8 @@ func (s *Service) Run() error {
 			os.Exit(1)
 		}
 
+		s.logger.Sugar().Debugw("connection accepted", "remote", conn.RemoteAddr().String())
+
 		// Begin handling the connection on a new thread
 		go s.handle(conn)
 	}
@@ -76,6 +78,8 @@ func (s *Service) handle(conn net.Conn) {
 		s.logger.Sugar().Error("failed to read the request", "error", err)
 		return
 	}
+
+	s.logger.Sugar().Debugw("read request", "request", rawRequest)
 
 	// Parse the request body as an OSP request.
 	req, err := Parse(rawRequest)

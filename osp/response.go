@@ -53,7 +53,7 @@ func (r *Response) String() string {
 	}
 
 	if r.Body != "" {
-		str = fmt.Sprintf("%v\n%v", str, r.Body)
+		str = fmt.Sprintf("%v\n\n%v", str, r.Body)
 	}
 
 	return fmt.Sprintf("%v\n", str)

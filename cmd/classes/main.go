@@ -1,8 +1,13 @@
 package main
 
 import (
+	"encoding/json"
 	"log"
+	"time"
 
+	"github.com/lucsky/cuid"
+	"go.h4n.io/openschool/class/models"
+	"go.h4n.io/openschool/class/repos/class"
 	"go.h4n.io/openschool/osp"
 )
 
@@ -13,14 +18,53 @@ func main() {
 	// }
 	// cfg := &tls.Config{Certificates: []tls.Certificate{cert}}
 
+	repo := class.InMemoryClassRepository{
+		Items: []models.Class{
+			{
+				Id:          cuid.New(),
+				Name:        `class-1a`,
+				DisplayName: `Class 1a: Mathematics 101`,
+				Description: `A mathematics class`,
+				CreatedAt:   time.Now(),
+				UpdatedAt:   time.Now(),
+			},
+			{
+				Id:          cuid.New(),
+				Name:        `class-1b`,
+				DisplayName: `Class 1b: Chemistry 101`,
+				Description: `A chemistry class`,
+				CreatedAt:   time.Now(),
+				UpdatedAt:   time.Now(),
+			},
+			{
+				Id:          cuid.New(),
+				Name:        `class-1c`,
+				DisplayName: `Class 1c: Physics 101`,
+				Description: `A physics class`,
+				CreatedAt:   time.Now(),
+				UpdatedAt:   time.Now(),
+			},
+		},
+	}
+
 	classResource := osp.Resource{
 		LIST: func(request *osp.OspRequest) (osp.Response, error) {
+			items, err := repo.GetAll(10, 1)
+			if err != nil {
+				return osp.Response{}, err
+			}
+
+			body, err := json.Marshal(items)
+			if err != nil {
+				return osp.Response{}, err
+			}
+
 			return osp.Response{
 				Status: osp.OspStatusSuccess,
 				Headers: map[string]string{
 					"content-type": "text/plain",
 				},
-				Body: `list response`,
+				Body: string(body),
 			}, nil
 		},
 	}
