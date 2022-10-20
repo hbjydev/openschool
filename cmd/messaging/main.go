@@ -1,9 +1,10 @@
 package main
 
 import (
+	"go.h4n.io/openschool/cli"
 	"go.h4n.io/openschool/cmd/messaging/server"
 )
 
 func main() {
-	server.NewMessagingServerCommand().Execute()
+	cli.Run(server.NewMessagingServerCommand())
 }

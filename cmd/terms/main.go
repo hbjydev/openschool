@@ -1,9 +1,10 @@
 package main
 
 import (
+	"go.h4n.io/openschool/cli"
 	"go.h4n.io/openschool/cmd/terms/server"
 )
 
 func main() {
-	server.NewTermsServerCommand().Execute()
+	cli.Run(server.NewTermsServerCommand())
 }

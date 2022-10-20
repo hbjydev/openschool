@@ -7,9 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func Run(service string, cmd *cobra.Command) int {
-	cmd.Short = service
-
+func Run(cmd *cobra.Command) int {
 	if err := run(cmd); err != nil {
 		return 1
 	}
