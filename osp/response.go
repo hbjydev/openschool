@@ -23,6 +23,10 @@ var (
 		StatusCode: 400,
 		Reason:     "Bad Request",
 	}
+	OspStatusNotFound = OspStatus{
+		StatusCode: 404,
+		Reason:     "Not Found",
+	}
 	OspStatusServerError = OspStatus{
 		StatusCode: 500,
 		Reason:     "Internal server error",

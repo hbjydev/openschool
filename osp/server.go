@@ -124,7 +124,7 @@ func (s *Service) handle(conn net.Conn) {
 	// Log the request to the console.
 	s.Logger.Sugar().Infow("got request", logKvs...)
 
-	res, ok := s.Resources[req.Osrn.Type]
+	resource, ok := s.Resources[req.Osrn.Type]
 	if !ok {
 		resp := Response{
 			Status: OspStatusBadRequest,
@@ -147,15 +147,15 @@ func (s *Service) handle(conn net.Conn) {
 
 	switch req.Action {
 	case ActionGet:
-		resp, err = res.GET(req)
+		resp, err = resource.GET(req)
 	case ActionList:
-		resp, err = res.LIST(req)
+		resp, err = resource.LIST(req)
 	case ActionCreate:
-		resp, err = res.CREATE(req)
+		resp, err = resource.CREATE(req)
 	case ActionUpdate:
-		resp, err = res.UPDATE(req)
+		resp, err = resource.UPDATE(req)
 	case ActionDelete:
-		resp, err = res.DELETE(req)
+		resp, err = resource.DELETE(req)
 	}
 
 	if err != nil {

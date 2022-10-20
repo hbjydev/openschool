@@ -10,6 +10,34 @@ import (
 
 func NewClassResource(repo class.ClassRepository) osp.Resource {
 	return osp.Resource{
+		GET: func(request *osp.Request) (osp.Response, error) {
+			id := request.Osrn.Id
+
+			class, err := repo.Get(id)
+			if err != nil {
+				return osp.Response{}, err
+			}
+
+			if class == nil {
+				return osp.Response{
+					Status: osp.OspStatusNotFound,
+				}, nil
+			}
+
+			classJson, err := json.Marshal(class)
+			if err != nil {
+				return osp.Response{}, err
+			}
+
+			return osp.Response{
+				Status: osp.OspStatusSuccess,
+				Headers: map[string]string{
+					"Content-Type": "application/json",
+				},
+				Body: string(classJson),
+			}, nil
+		},
+
 		LIST: func(request *osp.Request) (osp.Response, error) {
 			page, perPage, err := osputil.PaginationFromRequest(request)
 			if err != nil {

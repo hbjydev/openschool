@@ -52,6 +52,7 @@ func (r *InMemoryClassRepository) Get(id string) (*models.Class, error) {
 	for _, v := range r.Items {
 		if v.Id == id {
 			found = &v
+			break
 		}
 	}
 
