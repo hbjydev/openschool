@@ -51,8 +51,18 @@ func CreateCommand(server *osp.Service) *cobra.Command {
 			server.Logger = logger
 
 			if tlsEnabled {
-				server.Logger.Sugar().Info("server configured to use TLS, configuring...")
-				cert, err := tls.LoadX509KeyPair("pki/classes/fullchain.pem", "pki/classes/cert.key")
+				chain, err := cmd.PersistentFlags().GetString("tls.chain")
+				if err != nil {
+					return err
+				}
+
+				key, err := cmd.PersistentFlags().GetString("tls.key")
+				if err != nil {
+					return err
+				}
+
+				server.Logger.Sugar().Infow("server configured to use TLS, configuring...")
+				cert, err := tls.LoadX509KeyPair(chain, key)
 				if err != nil {
 					panic(err)
 				}
@@ -60,7 +70,7 @@ func CreateCommand(server *osp.Service) *cobra.Command {
 				server.Tls = cfg
 			}
 
-			server.Logger.Sugar().Info("starting server", "addr", server.Addr, "name", server.Name)
+			server.Logger.Sugar().Infow("starting server", "addr", server.Addr, "name", server.Name)
 			return server.Run()
 		},
 	}
