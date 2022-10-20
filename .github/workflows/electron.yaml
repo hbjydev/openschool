@@ -27,7 +27,7 @@ jobs:
 
       - name: Build
         working-directory: ui
-        run: yarn make
+        run: yarn electron:build
 
       - uses: actions/upload-artifact@v3
         with:
@@ -60,7 +60,7 @@ jobs:
 
       - name: Build
         working-directory: ui
-        run: yarn make
+        run: yarn electron:build
 
       - uses: actions/upload-artifact@v3
         with:
@@ -87,7 +87,7 @@ jobs:
 
       - name: Build
         working-directory: ui
-        run: yarn make
+        run: yarn electron:build
 
       - uses: actions/upload-artifact@v3
         with:
