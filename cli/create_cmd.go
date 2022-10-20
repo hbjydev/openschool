@@ -12,7 +12,7 @@ import (
 )
 
 func CreateCommand(server *osp.Service) *cobra.Command {
-	use := fmt.Sprintf("%v [-L addr] [--tls.enable] [--tls.chain path/to/chain] [--tls.key path/to/key]", server.Name)
+	use := fmt.Sprintf("%v", server.Name)
 
 	cmd := cobra.Command{
 		Short: server.Name,
@@ -78,6 +78,7 @@ func CreateCommand(server *osp.Service) *cobra.Command {
 	}
 
 	cmd.PersistentFlags().StringP("listen", "L", server.Addr, "the address to listen for incoming connections on")
+	cmd.PersistentFlags().StringP("amqp", "A", "amqp://guest:guest@localhost:5672/", "the connection string to connect to an amqp service with")
 	cmd.PersistentFlags().Bool("tls.enable", false, "whether or not to enable TLS")
 	cmd.PersistentFlags().String("tls.chain", fmt.Sprintf("/etc/openschool/%v/tls.crt", server.Name), "the TLS full-chain PEM to configure CAs and certificate data")
 	cmd.PersistentFlags().String("tls.key", fmt.Sprintf("/etc/openschool/%v/tls.key", server.Name), "the TLS private key to authenticate the server with")

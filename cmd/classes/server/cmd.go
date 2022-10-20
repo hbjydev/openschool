@@ -19,7 +19,5 @@ func NewClassesServerCommand() *cobra.Command {
 		},
 	}
 
-	cmd := cli.CreateCommand(server)
-
-	return cmd
+	return cli.CreateCommand(server)
 }

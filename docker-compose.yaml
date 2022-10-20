@@ -2,10 +2,8 @@
 version: '3'
 
 services:
-  mqtt:
-    image: eclipse-mosquitto:2.0.15
-    volumes:
-      - ./dev/mqtt/mosquitto.conf:/mosquitto/config/mosquitto.conf
+  rabbitmq:
+    image: rabbitmq:3-management
     ports:
-      - 1883:1883
-      - 9001:9001
+      - 15672:15672
+      - 5672:5672
