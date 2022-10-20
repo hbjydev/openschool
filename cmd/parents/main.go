@@ -1,20 +1,9 @@
 package main
 
 import (
-	"log"
-
-	"go.h4n.io/openschool/osp"
+	"go.h4n.io/openschool/cmd/parents/server"
 )
 
 func main() {
-	server := &osp.Service{
-		Addr: `0.0.0.0:8003`,
-		Name: `parents`,
-	}
-
-	// classRepo := class.InMemoryClassRepository{
-	// Items: []models.Class{},
-	// }
-
-	log.Fatal(server.Run())
+	server.NewParentsServerCommand().Execute()
 }
