@@ -21,8 +21,10 @@
             </thead>
             <tbody>
                 <tr :class="['h-12', 'border-zinc-50', idx == (classes.length - 1) ? '' : 'border-b']"
-                    v-for=" c, idx in classes" :key="c.id" :id="`class-${c.name}`" :to="`/class/${c.id}`">
-                    <td class="pl-8 pr-4 text-green-600">{{c.display_name}}</td>
+                    v-for=" c, idx in classes" :key="c.id" :id="`class-${c.id}`">
+                    <td class="pl-8 pr-4 text-green-600">
+                        <RouterLink :to="`/class/${c.id}`">{{c.display_name}}</RouterLink>
+                    </td>
                     <td class="pl-4 pr-8">{{c.description}}</td>
                 </tr>
             </tbody>

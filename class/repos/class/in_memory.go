@@ -31,7 +31,19 @@ func NewInMemoryClassRepository(itemCount int) InMemoryClassRepository {
 }
 
 func (r *InMemoryClassRepository) GetAll(perPage int, page int) ([]models.Class, error) {
-	return r.Items, nil
+	var items []models.Class
+
+	offset := (page - 1) * perPage
+	if page == 1 {
+		offset = 0
+	}
+
+	for i := offset; i < (offset + perPage); i++ {
+		item := r.Items[i]
+		items = append(items, item)
+	}
+
+	return items, nil
 }
 
 func (r *InMemoryClassRepository) Get(id string) (*models.Class, error) {

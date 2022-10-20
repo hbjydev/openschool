@@ -6,18 +6,41 @@ class OSPRequest {
    * @param {string} method 
    * @param {string} osrn 
    * @param {string} version 
+   * @param {Map<string, string>} headers
    */
-  constructor(method, osrn, version) {
+  constructor(method, osrn, version, headers = new Map(), body = '') {
     this.method = method;
     this.osrn = osrn;
     this.version = version;
+    this.headers = headers;
+    this.body = body;
+  }
+
+  get headersList() {
+    let headers = [];
+
+    this.headers.forEach((v, k) => {
+      headers.push(`${k}: ${v}`);
+    });
+
+    return headers.join('\r\n');
   }
 
   /**
    * @returns {string}
    */
   toString() {
-    return `${this.method} ${this.osrn} ${this.version}\r\n\r\n`;
+    let request = `${this.method} ${this.osrn} ${this.version}`;
+
+    if (this.headers.size > 0) {
+      request = `${request}\r\n${this.headersList}`
+    }
+
+    if (this.body.size > 0) {
+      request = `${request}\r\n\r\n${this.body}`
+    }
+
+    return `${request}\r\n\r\n`
   }
 
   /**
