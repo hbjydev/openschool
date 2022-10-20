@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io"
+	"log"
 	"net"
 	"os"
 	"strings"
@@ -40,7 +41,11 @@ func main() {
 	fmt.Printf("%v\n", req.String())
 	reqData := []byte(fmt.Sprintf("%v\r\n\r\n", req.String()))
 
-	conn.Write(reqData)
+	_, err = conn.Write(reqData)
+	if err != nil {
+		log.Fatalf("failed to write request: %v", err.Error())
+		return
+	}
 
 	result, err := io.ReadAll(conn)
 	if err != nil {

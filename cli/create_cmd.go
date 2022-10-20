@@ -25,7 +25,9 @@ func CreateCommand(server *osp.Service) *cobra.Command {
 			}
 
 			if tlsEnabled {
-				validateTlsFiles(cmd)
+				if err := validateTlsFiles(cmd); err != nil {
+					return err
+				}
 			}
 
 			return nil

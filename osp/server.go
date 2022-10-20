@@ -86,7 +86,13 @@ func (s *Service) handle(conn net.Conn) {
 			},
 			Body: err.Error(),
 		}
-		conn.Write(resp.Bytes())
+
+		_, err := conn.Write(resp.Bytes())
+		if err != nil {
+			s.Logger.Sugar().Errorf("failed to write response: %v", err.Error())
+			return
+		}
+
 		return
 	}
 
@@ -106,7 +112,12 @@ func (s *Service) handle(conn net.Conn) {
 
 		s.Logger.Sugar().Errorw("invalid service given", logKvs...)
 
-		conn.Write(resp.Bytes())
+		_, err := conn.Write(resp.Bytes())
+		if err != nil {
+			s.Logger.Sugar().Errorf("failed to write response: %v", err.Error())
+			return
+		}
+
 		return
 	}
 
@@ -123,7 +134,12 @@ func (s *Service) handle(conn net.Conn) {
 			Body: fmt.Sprintf(`this service does not include resource %v`, req.Osrn.Type),
 		}
 
-		conn.Write(resp.Bytes())
+		_, err := conn.Write(resp.Bytes())
+		if err != nil {
+			s.Logger.Sugar().Errorf("failed to write response: %v", err.Error())
+			return
+		}
+
 		return
 	}
 
@@ -151,11 +167,20 @@ func (s *Service) handle(conn net.Conn) {
 			Body: err.Error(),
 		}
 
-		conn.Write(resp.Bytes())
+		_, err := conn.Write(resp.Bytes())
+		if err != nil {
+			s.Logger.Sugar().Errorf("failed to write response: %v", err.Error())
+			return
+		}
+
 		return
 	}
 
-	conn.Write(resp.Bytes())
+	_, err = conn.Write(resp.Bytes())
+	if err != nil {
+		s.Logger.Sugar().Errorf("failed to write response: %v", err.Error())
+		return
+	}
 }
 
 func ConnLogMaps(c net.Conn) []interface{} {
