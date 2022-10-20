@@ -1,3 +1,3 @@
 package osp
 
-type HandlerFunc func(request *OspRequest) (Response, error)
+type HandlerFunc func(request *Request) (Response, error)

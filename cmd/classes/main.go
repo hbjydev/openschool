@@ -48,7 +48,7 @@ func main() {
 	}
 
 	classResource := osp.Resource{
-		LIST: func(request *osp.OspRequest) (osp.Response, error) {
+		LIST: func(request *osp.Request) (osp.Response, error) {
 			items, err := repo.GetAll(10, 1)
 			if err != nil {
 				return osp.Response{}, err

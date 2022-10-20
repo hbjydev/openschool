@@ -135,15 +135,15 @@ func (s *Service) handle(conn net.Conn) {
 	var resp Response
 
 	switch req.Action {
-	case OspActionGet:
+	case ActionGet:
 		resp, err = res.GET(req)
-	case OspActionList:
+	case ActionList:
 		resp, err = res.LIST(req)
-	case OspActionCreate:
+	case ActionCreate:
 		resp, err = res.CREATE(req)
-	case OspActionUpdate:
+	case ActionUpdate:
 		resp, err = res.UPDATE(req)
-	case OspActionDelete:
+	case ActionDelete:
 		resp, err = res.DELETE(req)
 	}
 

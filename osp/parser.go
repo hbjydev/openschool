@@ -8,9 +8,9 @@ import (
 
 type OspParser struct{}
 
-func Parse(osp string) (*OspRequest, error) {
+func Parse(osp string) (*Request, error) {
 	lines := strings.Split(osp, "\n")
-	request := OspRequest{}
+	request := Request{}
 
 	if len(lines) == 0 {
 		return nil, ErrorBadVersion

@@ -18,7 +18,7 @@ func TestParseOnlyRequestLine(t *testing.T) {
 		t.Error(err)
 	}
 
-	assert.Equal(t, req.Action, osp.OspActionList)
+	assert.Equal(t, req.Action, osp.ActionList)
 
 	assert.Equal(t, req.Osrn, osrn.OSRN{
 		Service: "class",

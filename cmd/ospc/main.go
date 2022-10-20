@@ -31,7 +31,7 @@ func main() {
 		return
 	}
 
-	req := osp.OspRequest{
+	req := osp.Request{
 		Action:  action,
 		Osrn:    osrn.ParseOSRN(strings.ToLower(os.Args[3])),
 		Version: "OSP/1.1",
