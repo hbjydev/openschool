@@ -2,6 +2,7 @@ package class
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/lucsky/cuid"
@@ -10,6 +11,23 @@ import (
 
 type InMemoryClassRepository struct {
 	Items []models.Class
+}
+
+func NewInMemoryClassRepository(itemCount int) InMemoryClassRepository {
+	var items []models.Class
+
+	for i := 0; i < itemCount; i++ {
+		items = append(items, models.Class{
+			Id:          cuid.New(),
+			Name:        fmt.Sprintf(`class-%v`, i),
+			DisplayName: fmt.Sprintf(`Class %v`, i),
+			Description: fmt.Sprintf(`This is class %v`, i),
+			CreatedAt:   time.Now(),
+			UpdatedAt:   time.Now(),
+		})
+	}
+
+	return InMemoryClassRepository{Items: items}
 }
 
 func (r *InMemoryClassRepository) GetAll(perPage int, page int) ([]models.Class, error) {

@@ -17,20 +17,15 @@ type Service struct {
 
 	Tls *tls.Config
 
-	logger *zap.Logger
+	Logger *zap.Logger
 }
 
 // Run will start a TCP listener on the network address defined by
 // [Service.Addr] and begin a handler loop.
 func (s *Service) Run() error {
-	// Create a new Zap logger (which will log to JSON)
-	logger, err := zap.NewDevelopment()
-	if err != nil {
-		return err
-	}
-	s.logger = logger
-
+	var err error
 	var lis net.Listener
+
 	// Open a new TCP socket on the [Service.Addr]
 	if s.Tls != nil {
 		lis, err = tls.Listen("tcp", s.Addr, s.Tls)
@@ -53,11 +48,11 @@ func (s *Service) Run() error {
 		if err != nil {
 			// If an error is thrown, log it to the console and close the
 			// connection.
-			logger.Sugar().Error(err)
+			s.Logger.Sugar().Error(err)
 			os.Exit(1)
 		}
 
-		s.logger.Sugar().Debugw("connection accepted", "remote", conn.RemoteAddr().String())
+		s.Logger.Sugar().Debugw("connection accepted", "remote", conn.RemoteAddr().String())
 
 		// Begin handling the connection on a new thread
 		go s.handle(conn)
@@ -75,11 +70,11 @@ func (s *Service) handle(conn net.Conn) {
 	// as the end of the request body.
 	rawRequest, err := util.ReadConnection(conn)
 	if err != nil {
-		s.logger.Sugar().Error("failed to read the request", "error", err)
+		s.Logger.Sugar().Error("failed to read the request", "error", err)
 		return
 	}
 
-	s.logger.Sugar().Debugw("read request", "request", rawRequest)
+	s.Logger.Sugar().Debugw("read request", "request", rawRequest)
 
 	// Parse the request body as an OSP request.
 	req, err := Parse(rawRequest)
@@ -109,14 +104,14 @@ func (s *Service) handle(conn net.Conn) {
 			Body: fmt.Sprintf(`this server does not include service %v`, req.Osrn.Service),
 		}
 
-		s.logger.Sugar().Errorw("invalid service given", logKvs...)
+		s.Logger.Sugar().Errorw("invalid service given", logKvs...)
 
 		conn.Write(resp.Bytes())
 		return
 	}
 
 	// Log the request to the console.
-	s.logger.Sugar().Infow("got request", logKvs...)
+	s.Logger.Sugar().Infow("got request", logKvs...)
 
 	res, ok := s.Resources[req.Osrn.Type]
 	if !ok {
