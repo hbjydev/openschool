@@ -9,6 +9,7 @@ import (
 	"go.h4n.io/openschool/class/models"
 	"go.h4n.io/openschool/class/repos/class"
 	"go.h4n.io/openschool/osp"
+	"go.h4n.io/openschool/osp/osputil"
 )
 
 func main() {
@@ -49,7 +50,12 @@ func main() {
 
 	classResource := osp.Resource{
 		LIST: func(request *osp.Request) (osp.Response, error) {
-			items, err := repo.GetAll(10, 1)
+			page, perPage, err := osputil.PaginationFromRequest(request)
+			if err != nil {
+				return osp.Response{}, err
+			}
+
+			items, err := repo.GetAll(perPage, page)
 			if err != nil {
 				return osp.Response{}, err
 			}

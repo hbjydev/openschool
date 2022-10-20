@@ -37,8 +37,10 @@ func main() {
 		Version: "OSP/1.1",
 	}
 
-	fmt.Printf("%v", req.String())
-	conn.Write(req.Bytes())
+	fmt.Printf("%v\n", req.String())
+	reqData := []byte(fmt.Sprintf("%v\r\n\r\n", req.String()))
+
+	conn.Write(reqData)
 
 	result, err := io.ReadAll(conn)
 	if err != nil {
