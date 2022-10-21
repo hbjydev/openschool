@@ -62,5 +62,15 @@ func NewClassResource(repo class.ClassRepository) osp.Resource {
 				Body: string(body),
 			}, nil
 		},
+
+		CREATE: func(request *osp.Request) (osp.Response, error) {
+			return osp.Response{
+				Status: osp.OspStatusCreated,
+				Headers: map[string]string{
+					"content-type": "text/plain",
+				},
+				Body: "Did the thing",
+			}, nil
+		},
 	}
 }

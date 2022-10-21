@@ -19,6 +19,10 @@ var (
 		StatusCode: 200,
 		Reason:     "Success",
 	}
+	OspStatusCreated = OspStatus{
+		StatusCode: 201,
+		Reason:     "Created",
+	}
 	OspStatusBadRequest = OspStatus{
 		StatusCode: 400,
 		Reason:     "Bad Request",

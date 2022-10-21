@@ -5,9 +5,11 @@ import (
 	"go.h4n.io/openschool/class/repos/class"
 	"go.h4n.io/openschool/cli"
 	"go.h4n.io/openschool/osp"
+	"go.uber.org/zap"
 )
 
 func NewClassesServerCommand() *cobra.Command {
+	logger, _ := zap.NewDevelopment()
 	repo := class.NewInMemoryClassRepository(50)
 	classResource := NewClassResource(&repo)
 
