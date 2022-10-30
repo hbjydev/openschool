@@ -7,46 +7,35 @@ import (
 	"time"
 
 	"github.com/streadway/amqp"
+	"go.h4n.io/openschool/config"
 	"go.uber.org/zap"
 )
 
-type Config struct {
-	Schema               string
-	Username             string
-	Password             string
-	Host                 string
-	Port                 string
-	Vhost                string
-	ConnectionName       string
-	ChannelNotifyTimeout time.Duration
-	Reconnect            struct {
-		Interval   time.Duration
-		MaxAttempt int
-	}
-}
+var (
+	BusInst *Bus
+)
 
 type Bus struct {
 	mux                  sync.RWMutex
-	config               Config
+	config               config.BusConfig
 	logger               *zap.Logger
 	dialConfig           amqp.Config
 	connection           *amqp.Connection
 	ChannelNotifyTimeout time.Duration
 }
 
-func New(config Config, logger *zap.Logger) *Bus {
+func New(config *config.Config, logger *zap.Logger) *Bus {
 	return &Bus{
-		config:               config,
+		config:               config.Bus,
 		logger:               logger,
-		dialConfig:           amqp.Config{Properties: amqp.Table{"connection_name": config.ConnectionName}},
-		ChannelNotifyTimeout: config.ChannelNotifyTimeout,
+		dialConfig:           amqp.Config{Properties: amqp.Table{"connection_name": config.Bus.ConnectionName}},
+		ChannelNotifyTimeout: config.Bus.ChannelNotifyTimeout,
 	}
 }
 
 func (b *Bus) getConnectionString() string {
 	return fmt.Sprintf(
-		"%s://%s:%s@%s:%s/%s",
-		b.config.Schema,
+		"amqp://%s:%s@%s:%d/%s",
 		b.config.Username,
 		b.config.Password,
 		b.config.Host,
@@ -62,6 +51,7 @@ func (b *Bus) Connect() error {
 	)
 
 	if err != nil {
+    b.logger.Sugar().Errorf("failed to connect to amqp bus: %v", err.Error())
 		return err
 	}
 

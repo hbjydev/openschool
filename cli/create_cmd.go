@@ -7,6 +7,8 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
+	"go.h4n.io/openschool/bus"
+	"go.h4n.io/openschool/config"
 	"go.h4n.io/openschool/osp"
 	"go.uber.org/zap"
 )
@@ -49,6 +51,11 @@ func CreateCommand(server *osp.Service) *cobra.Command {
 				return err
 			}
 
+			conf := config.NewDevelopment()
+
+			logger.Sugar().Infow("connecting to bus")
+			bus.BusInst = bus.New(conf, logger)
+
 			server.Addr = addr
 			server.Logger = logger
 
@@ -70,6 +77,10 @@ func CreateCommand(server *osp.Service) *cobra.Command {
 				}
 				cfg := &tls.Config{Certificates: []tls.Certificate{cert}}
 				server.Tls = cfg
+			}
+
+			if err := bus.BusInst.Connect(); err != nil {
+				return err
 			}
 
 			server.Logger.Sugar().Infow("starting server", "addr", server.Addr, "name", server.Name)
